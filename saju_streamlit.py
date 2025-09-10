@@ -18,6 +18,16 @@ with st.form("saju_input_form"):
     submitted = st.form_submit_button("분석하기")
 
 if submitted:
+    # 디버그: 폼 입력값 출력
+    print("\n=== 디버그: 폼 입력값 ===")
+    print(f"이름: {name}")
+    print(f"국가: {country}")
+    print(f"도시: {city}")
+    print(f"출생일시: {birth_date} {birth_time}")
+    print(f"성별: {gender}")
+    print(f"달력 종류: {calendar_type}")
+    print(f"분석 기준일: {analysis_date}")
+    
     with st.spinner("AI 분석 중입니다..."):
         input_data = {
             "name": name,
@@ -28,8 +38,16 @@ if submitted:
             "calendar_type": calendar_type,
             "analysis_date": analysis_date
         }
+        
+        # 디버그: AI 입력 데이터
+        print("\n=== 디버그: AI 모델 입력 데이터 ===")
+        print(input_data)
         answer = chain.invoke(input_data)
-
+        
+        # 디버그: AI 응답 데이터
+        print("\n=== 디버그: AI 모델 응답 데이터 ===")
+        print(f"응답 키 목록: {list(answer.keys())}")
+        
         user_info = answer.get('input', {})
         won_guk = answer.get('won_guk', {})
         five_elements = answer.get('five_elements', {})
@@ -38,6 +56,13 @@ if submitted:
         balance_index = five_elements.get('balance_index', 0)
         content = answer.get('content', '')
         markdown_report = answer.get('markdown_report', '')
+        
+        # 디버그: 주요 데이터 처리 결과
+        print("\n=== 디버그: 주요 데이터 처리 결과 ===")
+        print(f"사주 원국 데이터: {won_guk}")
+        print(f"오행 분석 데이터: {five_elements}")
+        print(f"음양 비율 - 음: {yin_percent}%, 양: {yang_percent}%")
+        print(f"균형 지수: {balance_index}")
 
         # 1️⃣ 기본 정보
         with st.expander("1️⃣ 기본 정보", expanded=True):
@@ -91,13 +116,18 @@ if submitted:
 
         # 4️⃣ 일간(일주) 중심 십신(十神) 분석 (도넛차트)
         with st.expander("4️⃣ 일간(일주) 중심 십신(十神) 분석", expanded=True):
+            # 디버그: 십신 분석
+            print("\n=== 디버그: 십신 분석 데이터 ===")
             ten_gods = answer.get('ten_gods', {})
+            print(f"십신 데이터: {ten_gods}")
+            
             ten_god_labels = []
             ten_god_values = []
             ten_god_colors = ["#e67e22", "#9b59b6", "#16a085", "#34495e", "#f1c40f", "#c0392b", "#2980b9", "#27ae60", "#d35400", "#7f8c8d"]
             for k, v in ten_gods.items():
                 ten_god_labels.append(k)
                 ten_god_values.append(v.get('percent', 0))
+                print(f"십신 '{k}': {v.get('percent', 0)}%")
             if ten_god_labels:
                 fig3 = go.Figure(
                     data=[go.Pie(
