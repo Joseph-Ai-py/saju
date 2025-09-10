@@ -1,0 +1,15 @@
+[project]
+name = "workspace"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "chromadb>=1.0.20",
+    "langchain>=0.3.27",
+    "langchain-community>=0.3.29",
+    "langchain-core>=0.3.75",
+    "langchain-google-genai>=2.1.10",
+    "plotly>=6.3.0",
+    "streamlit>=1.49.1",
+]
